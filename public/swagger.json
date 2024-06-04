@@ -1,0 +1,15 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Content management system",
+    "summary": "Built on Express with TypeScript.",
+    "contact": {
+      "name": "Repo",
+      "url": "https://github.com/chrjl/cms-express-ts"
+    }
+  },
+  "server": {
+    "url": "/",
+    "description": "Development server"
+  }
+}
