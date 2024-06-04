@@ -4,38 +4,19 @@
  * Module dependencies.
  */
 
-import app from '../app.js';
+import app from '../app';
 import makeDebug from 'debug';
 import http from 'http';
+import type { ErrorRequestHandler } from 'express';
 
 const debug = makeDebug('app:*');
 
 /**
+ * Normalize a port into a number, string, or false.
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
-
-/**
- * Create HTTP server.
- */
-
-var server = http.createServer(app);
-
-/**
- * Listen on provided port, on all network interfaces.
- */
-
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
-
-/**
- * Normalize a port into a number, string, or false.
- */
-
-function normalizePort(val) {
+const normalizePort = (val: string) => {
   var port = parseInt(val, 10);
 
   if (isNaN(port)) {
@@ -49,13 +30,22 @@ function normalizePort(val) {
   }
 
   return false;
-}
+};
+
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+var server = http.createServer(app);
 
 /**
  * Event listener for HTTP server "error" event.
  */
 
-function onError(error) {
+const onError: ErrorRequestHandler = (error) => {
   if (error.syscall !== 'listen') {
     throw error;
   }
@@ -75,14 +65,24 @@ function onError(error) {
     default:
       throw error;
   }
-}
+};
+
+server.on('error', onError);
 
 /**
  * Event listener for HTTP server "listening" event.
  */
 
-function onListening() {
+const onListening = () => {
   var addr = server.address();
-  var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
+  var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr?.port;
   debug('Listening on ' + bind);
-}
+};
+
+server.on('listening', onListening);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port);
