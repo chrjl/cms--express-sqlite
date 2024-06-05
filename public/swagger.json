@@ -52,7 +52,13 @@
       "delete": { "tags": ["posts"], "summary": "Delete a single post." }
     },
     "/keywords": {
-      "get": { "tags": ["keywords"], "summary": "Get a list of all keywords." }
+      "get": {
+        "tags": ["keywords"],
+        "summary": "Get a list of all keywords.",
+        "responses": {
+          "200": { "description": "OK", "content": { "application/json": {} } }
+        }
+      }
     },
     "/posts{?keyword*}": {
       "get": {

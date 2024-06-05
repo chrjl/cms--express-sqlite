@@ -15,3 +15,9 @@ SELECT posts.id, title, description, created, modified, GROUP_CONCAT(keyword) AS
   return query.map((row) => ({ ...row, keywords: row.keywords.split(',') }));
 }
 
+export function getAllKeywords() {
+  const query = 'SELECT DISTINCT keyword FROM keywords';
+
+  const result = db.prepare(query).all();
+  return result.map((row) => row.keyword);
+}
