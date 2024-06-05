@@ -3,8 +3,8 @@ import swaggerUi from 'swagger-ui-express';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 
+import apiRouter from './routes/api';
 import indexRouter from './routes/index';
-import usersRouter from './routes/users';
 import swaggerDocument from '../public/swagger.json';
 
 const app = express();
@@ -27,6 +27,6 @@ app.use(
 app.use('/public', express.static('public'));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/api', apiRouter);
 
 export default app;
