@@ -16,7 +16,13 @@
   ],
   "paths": {
     "/posts": {
-      "get": { "tags": ["posts"], "summary": "Get a list of all posts." },
+      "get": {
+        "tags": ["posts"],
+        "summary": "Get a list of all posts.",
+        "responses": {
+          "200": { "description": "OK", "content": { "application/json": {} } }
+        }
+      },
       "post": { "tags": ["posts"], "summary": "Create a new post." }
     },
     "/posts/{id}": {
