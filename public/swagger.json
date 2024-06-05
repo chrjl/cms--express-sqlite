@@ -8,8 +8,58 @@
       "url": "https://github.com/chrjl/cms-express-ts"
     }
   },
-  "server": {
-    "url": "/",
-    "description": "Development server"
+  "servers": [
+    {
+      "url": "/api",
+      "description": "Development server"
+    }
+  ],
+  "paths": {
+    "/posts": {
+      "get": { "tags": ["posts"], "summary": "Get a list of all posts." },
+      "post": { "tags": ["posts"], "summary": "Create a new post." }
+    },
+    "/posts/{id}": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "id",
+          "required": "true",
+          "schema": {
+            "type": "integer"
+          },
+          "default": "1"
+        }
+      ],
+      "get": {
+        "tags": ["posts"],
+        "summary": "Get content and all metadata of a single post."
+      },
+      "put": {
+        "tags": ["posts"],
+        "summary": "Update content and/or metadata of a single post."
+      },
+      "patch": {
+        "tags": ["posts"],
+        "summary": "Update only metadata of a single post."
+      },
+      "delete": { "tags": ["posts"], "summary": "Delete a single post." }
+    },
+    "/keywords": {
+      "get": { "tags": ["keywords"], "summary": "Get a list of all keywords." }
+    },
+    "/posts{?keyword*}": {
+      "get": {
+        "tags": ["keywords"],
+        "summary": "Get a list of all posts matching one or multiple keywords.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "keyword",
+            "explode": true
+          }
+        ]
+      }
+    }
   }
 }
