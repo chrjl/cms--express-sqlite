@@ -1,4 +1,7 @@
 import db from '../configs/db';
+import makeDebug from 'debug';
+
+const debug = makeDebug('app:controllers');
 
 const allMetadataQuery = `
 SELECT posts.id, title, description, created, modified, GROUP_CONCAT(keyword) AS keywords FROM posts
