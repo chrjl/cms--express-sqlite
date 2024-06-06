@@ -14,12 +14,16 @@ export function describeAllPosts() {
 }
 
 export function getPost(id: number) {
-  const query = `
+  const postQuery = `
 SELECT * FROM posts
   WHERE id=${id}
   LIMIT 1;
   `;
 
+  const post = db.prepare(postQuery).get();
+  const keywords = getKeywordsByPost(id);
+
+  return { ...post, keywords };
 }
 
 export function getKeywordsByPost(postId: number) {
