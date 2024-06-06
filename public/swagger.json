@@ -63,6 +63,26 @@
       },
       "delete": { "tags": ["posts"], "summary": "Delete a single post." }
     },
+    "/posts/{id}/keywords": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "id",
+          "required": "true",
+          "schema": {
+            "type": "integer"
+          },
+          "default": "1"
+        }
+      ],
+      "get": {
+        "tags": ["keywords"],
+        "summary": "Get the list of keywords associated with a single post.",
+        "responses": {
+          "200": { "description": "OK", "content": { "application/json": {} } }
+        }
+      }
+    },
     "/keywords": {
       "get": {
         "tags": ["keywords"],

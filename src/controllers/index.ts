@@ -20,7 +20,17 @@ SELECT * FROM posts
   LIMIT 1;
   `;
 
-  return db.prepare(query).get();
+}
+
+export function getKeywordsByPost(postId: number) {
+  const query = `
+SELECT keyword FROM keywords
+  WHERE post_id=${postId}  
+  `;
+
+  const result = db.prepare(query).all();
+
+  return result.map((r) => r.keyword);
 }
 
 function describePosts(ids: number[]) {

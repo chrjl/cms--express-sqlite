@@ -5,6 +5,7 @@ import {
   describeAllPosts,
   getPost,
   getPostsByKeyword,
+  getKeywordsByPost,
 } from '../../controllers';
 
 const debug = makeDebug('app:api/posts');
@@ -29,6 +30,12 @@ router.route('/:id').get((req, res) => {
   } else {
     res.sendStatus(404);
   }
+});
+
+router.route('/:id/keywords').get((req, res) => {
+  const { id } = req.params;
+  const result = getKeywordsByPost(id);
+  res.json(result);
 });
 
 export default router;
