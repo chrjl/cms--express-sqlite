@@ -39,7 +39,11 @@
       ],
       "get": {
         "tags": ["posts"],
-        "summary": "Get content and all metadata of a single post."
+        "summary": "Get content and all metadata of a single post.",
+        "responses": {
+          "200": { "description": "OK", "content": { "application/json": {} } },
+          "404": { "description": "Not Found" }
+        }
       },
       "put": {
         "tags": ["posts"],

@@ -11,8 +11,14 @@ SELECT posts.id, title, description, created, modified, GROUP_CONCAT(keyword) AS
   return result.map((row) => ({ ...row, keywords: row.keywords.split(',') }));
 }
 
+export function getPost(id) {
+  const query = `
+SELECT * FROM posts
+  WHERE id=${id}
+  LIMIT 1;
+  `;
 
-  return query.map((row) => ({ ...row, keywords: row.keywords.split(',') }));
+  return db.prepare(query).get();
 }
 
 export function getAllKeywords() {
