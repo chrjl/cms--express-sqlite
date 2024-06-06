@@ -1,10 +1,13 @@
+import makeDebug from 'debug';
+
 import express from 'express';
 import {
-  getAllPostMetadata,
+  describeAllPosts,
   getPost,
   getPostsByKeyword,
 } from '../../controllers';
 
+const debug = makeDebug('app:api/posts');
 const router = express.Router();
 
 router.route('/').get((req, res) => {
@@ -13,7 +16,7 @@ router.route('/').get((req, res) => {
 
     res.json(getPostsByKeyword(keywords));
   } else {
-    res.json(getAllPostMetadata());
+    res.json(describeAllPosts());
   }
 });
 

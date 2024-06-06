@@ -6,14 +6,14 @@ SELECT posts.id, title, description, created, modified, GROUP_CONCAT(keyword) AS
   GROUP By posts.id 
   `;
 
-export function getAllPostMetadata() {
+export function describeAllPosts() {
   const query = allMetadataQuery;
 
   const result = db.prepare(query).all();
   return result.map((row) => ({ ...row, keywords: row.keywords.split(',') }));
 }
 
-export function getPost(id) {
+export function getPost(id: number) {
   const query = `
 SELECT * FROM posts
   WHERE id=${id}
@@ -23,7 +23,7 @@ SELECT * FROM posts
   return db.prepare(query).get();
 }
 
-function getPostMetadata(ids) {
+function describePosts(ids: number[]) {
   const query = `
 SELECT * FROM (${allMetadataQuery})
   WHERE id in ('${ids.join("','")}')
@@ -44,7 +44,7 @@ SELECT post_id FROM keywords
     .all()
     .map((res) => res.post_id);
 
-  return getPostMetadata(postIds);
+  return describePosts(postIds);
 }
 
 export function getAllKeywords() {
