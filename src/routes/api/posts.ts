@@ -1,10 +1,20 @@
 import express from 'express';
-import { getAllPostMetadata, getPost } from '../../controllers';
+import {
+  getAllPostMetadata,
+  getPost,
+  getPostsByKeyword,
+} from '../../controllers';
 
 const router = express.Router();
 
 router.route('/').get((req, res) => {
-  res.json(getAllPostMetadata());
+  if (req.query?.keyword) {
+    const keywords = [req.query.keyword].flat();
+
+    res.json(getPostsByKeyword(keywords));
+  } else {
+    res.json(getAllPostMetadata());
+  }
 });
 
 router.route('/:id').get((req, res) => {

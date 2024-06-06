@@ -17,11 +17,19 @@
   "paths": {
     "/posts": {
       "get": {
-        "tags": ["posts"],
-        "summary": "Get a list of all posts.",
+        "tags": ["posts", "keywords"],
+        "summary": "Get a list of all posts. Optionally filter based on keyword tag.",
         "responses": {
-          "200": { "description": "OK", "content": { "application/json": {} } }
-        }
+          "200": { "description": "OK", "content": { "application/json": {} } },
+          "404": { "description": "Not Found" }
+        },
+        "parameters": [
+          {
+            "in": "query",
+            "name": "keyword",
+            "explode": true
+          }
+        ]
       },
       "post": { "tags": ["posts"], "summary": "Create a new post." }
     },
@@ -62,19 +70,6 @@
         "responses": {
           "200": { "description": "OK", "content": { "application/json": {} } }
         }
-      }
-    },
-    "/posts{?keyword*}": {
-      "get": {
-        "tags": ["keywords"],
-        "summary": "Get a list of all posts matching one or multiple keywords.",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "keyword",
-            "explode": true
-          }
-        ]
       }
     }
   }
