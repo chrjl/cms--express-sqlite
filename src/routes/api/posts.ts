@@ -4,7 +4,7 @@ import express from 'express';
 import {
   describeAllPosts,
   getPost,
-  getPostsByKeyword,
+  filterPostsByKeyword,
   getKeywordsByPost,
 } from '../../controllers';
 
@@ -14,8 +14,9 @@ const router = express.Router();
 router.route('/').get((req, res) => {
   if (req.query?.keyword) {
     const keywords = [req.query.keyword].flat();
+    const postIds = filterPostsByKeyword(keywords);
 
-    res.json(getPostsByKeyword(keywords));
+    res.json(describeAllPosts().filter((p) => postIds.includes(p.id)));
   } else {
     res.json(describeAllPosts());
   }
