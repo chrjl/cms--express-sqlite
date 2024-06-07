@@ -12,6 +12,7 @@ const postKeywordsTextareaElement = document.getElementById(
 const postBodyTextareaElement = document.getElementById(
   'postBodyTextareaElement'
 );
+const newPostButtonElement = document.getElementById('newPostButtonElement');
 
 // render <option> elements for all posts
 const res = await fetch('/api/posts');
@@ -39,4 +40,16 @@ allPostsFormElement.addEventListener('submit', async (e) => {
   postMetadataTextareaElement.value = JSON.stringify(metadata, null, 2);
   postKeywordsTextareaElement.value = JSON.stringify(keywords, null, 2);
   postBodyTextareaElement.value = body;
+});
+
+// add event listener to new post button
+const newPostTemplate = {
+  title: '',
+  description: '',
+};
+
+newPostButtonElement.addEventListener('click', () => {
+  postMetadataTextareaElement.value = JSON.stringify(newPostTemplate, null, 2);
+  postKeywordsTextareaElement.value = JSON.stringify([]);
+  postBodyTextareaElement.value = '';
 });
