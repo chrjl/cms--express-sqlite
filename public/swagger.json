@@ -71,14 +71,6 @@
           "404": { "description": "Not Found" }
         }
       },
-      "put": {
-        "tags": ["posts"],
-        "summary": "Update content and/or metadata of a single post."
-      },
-      "patch": {
-        "tags": ["posts"],
-        "summary": "Update only metadata of a single post."
-      },
       "delete": {
         "tags": ["posts"],
         "summary": "Delete a single post.",
@@ -92,6 +84,53 @@
             "default": "9999"
           }
         ]
+      },
+      "patch": {
+        "tags": ["posts"],
+        "summary": "Update metadata of a single post.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "parameters": [
+              {
+                "in": "path",
+                "name": "id",
+                "default": "9999"
+              }
+            ],
+            "responses": {
+              "200": { "description": "OK" },
+              "404": { "description": "Not Found" }
+            },
+            "requestBody": {
+              "required": true,
+              "content": {
+                "application/json": {
+                  "example": {
+                    "title": "My updated post",
+                    "description": "An updated description of my post"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Not Found" }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "title": "My updated post",
+                "description": "An updated description of my post"
+              }
+            }
+          }
+        }
       }
     },
     "/posts/{id}/keywords": {

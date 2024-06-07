@@ -8,6 +8,7 @@ import {
   getKeywordsByPost,
   createPost,
   deletePost,
+  updatePostMetadata,
 } from '../../controllers';
 
 const debug = makeDebug('app:api/posts');
@@ -54,6 +55,18 @@ router
     const info = deletePost(id);
 
     res.sendStatus(204);
+  })
+  .patch((req, res) => {
+    const { id } = req.params;
+    const { title, description } = req.body;
+
+    const info = updatePostMetadata(id, { metadata: { title, description } });
+
+    if (info.changes === 0) {
+      res.sendStatus(404);
+    } else {
+      res.sendStatus(200);
+    }
   });
 
 router.route('/:id/keywords').get((req, res) => {

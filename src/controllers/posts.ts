@@ -47,3 +47,15 @@ WHERE id=$id`;
   const info = db.prepare(query).run({ id });
   return info;
 }
+
+export function updatePostMetadata(id, { metadata }) {
+  const { title, description } = metadata;
+  const now = new Date().toISOString();
+
+  const query = `UPDATE posts \
+SET title=$title, description=$description, modified=$modified \
+WHERE id=$id`;
+
+  const info = db.prepare(query).run({ id, title, description, modified: now });
+  return info;
+}
