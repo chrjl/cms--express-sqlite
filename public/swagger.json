@@ -79,7 +79,20 @@
         "tags": ["posts"],
         "summary": "Update only metadata of a single post."
       },
-      "delete": { "tags": ["posts"], "summary": "Delete a single post." }
+      "delete": {
+        "tags": ["posts"],
+        "summary": "Delete a single post.",
+        "responses": {
+          "204": { "description": "No Content" }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "default": "9999"
+          }
+        ]
+      }
     },
     "/posts/{id}/keywords": {
       "parameters": [

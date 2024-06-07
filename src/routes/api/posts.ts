@@ -7,6 +7,7 @@ import {
   filterPostsByKeyword,
   getKeywordsByPost,
   createPost,
+  deletePost,
 } from '../../controllers';
 
 const debug = makeDebug('app:api/posts');
@@ -36,16 +37,24 @@ router
     res.sendStatus(201);
   });
 
-router.route('/:id').get((req, res) => {
-  const { id } = req.params;
-  const result = getPost(id);
+router
+  .route('/:id')
+  .get((req, res) => {
+    const { id } = req.params;
+    const result = getPost(id);
 
-  if (result) {
-    res.json(result);
-  } else {
-    res.sendStatus(404);
-  }
-});
+    if (result) {
+      res.json(result);
+    } else {
+      res.sendStatus(404);
+    }
+  })
+  .delete((req, res) => {
+    const { id } = req.params;
+    const info = deletePost(id);
+
+    res.sendStatus(204);
+  });
 
 router.route('/:id/keywords').get((req, res) => {
   const { id } = req.params;

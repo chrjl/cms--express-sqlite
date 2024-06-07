@@ -37,3 +37,11 @@ VALUES ('${title}', '${description}', '${now}', '${now}')`;
   const info = db.prepare(query).run();
   return info;
 }
+
+export function deletePost(id) {
+  const query = `DELETE FROM posts \
+WHERE id=${id}`;
+
+  const info = db.prepare(query).run();
+  return info;
+}
