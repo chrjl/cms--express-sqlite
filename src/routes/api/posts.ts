@@ -9,6 +9,7 @@ import {
   createPost,
   deletePost,
   updatePostMetadata,
+  updatePostBody,
 } from '../../controllers';
 
 const debug = makeDebug('app:api/posts');
@@ -65,6 +66,19 @@ router
     if (info.changes === 0) {
       res.sendStatus(404);
     } else {
+      res.sendStatus(200);
+    }
+  })
+  .put((req, res) => {
+    const { id } = req.params;
+    const { body, ...metadata } = req.body;
+
+    const info = updatePostMetadata(id, { metadata });
+
+    if (info.changes === 0) {
+      res.sendStatus(404);
+    } else {
+      updatePostBody(id, { body });
       res.sendStatus(200);
     }
   });

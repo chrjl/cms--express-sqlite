@@ -59,3 +59,15 @@ WHERE id=$id`;
   const info = db.prepare(query).run({ id, title, description, modified: now });
   return info;
 }
+
+export function updatePostBody(id, { body }) {
+  const now = new Date().toISOString();
+  debug(body);
+
+  const query = `UPDATE posts \
+SET body=$body, modified=$now \
+WHERE id=$id`;
+
+  const info = db.prepare(query).run({ id, body, now });
+  return info
+}

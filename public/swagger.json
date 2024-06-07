@@ -131,6 +131,33 @@
             }
           }
         }
+      },
+      "put": {
+        "tags": ["posts"],
+        "summary": "Overwrite metadata and content body of a single post.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "default": "9999"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Not Found" }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "title": "My updated post",
+                "description": "An updated description of my post",
+                "body": "Updated content... Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore asperiores eum, quasi ipsam minus nihil! Neque porro labore nulla sit voluptate? Debitis quae ex neque optio! Maxime maiores expedita molestiae."
+              }
+            }
+          }
+        }
       }
     },
     "/posts/{id}/keywords": {
