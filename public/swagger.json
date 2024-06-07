@@ -126,6 +126,15 @@
         }
       }
     },
+    "/keywords": {
+      "get": {
+        "tags": ["keywords"],
+        "summary": "Get a list of all keywords.",
+        "responses": {
+          "200": { "description": "OK", "content": { "application/json": {} } }
+        }
+      }
+    },
     "/posts/{id}/keywords": {
       "parameters": [
         {
@@ -151,15 +160,6 @@
             "default": 1
           }
         ]
-      }
-    },
-    "/keywords": {
-      "get": {
-        "tags": ["keywords"],
-        "summary": "Get a list of all keywords.",
-        "responses": {
-          "200": { "description": "OK", "content": { "application/json": {} } }
-        }
       }
     }
   }
