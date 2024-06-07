@@ -31,7 +31,25 @@
           }
         ]
       },
-      "post": { "tags": ["posts"], "summary": "Create a new post." }
+      "post": {
+        "tags": ["posts"],
+        "summary": "Create a new post.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "title": "My new post",
+                "description": "A brief description of what my new post is about"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Created" },
+          "400": { "description": "Bad Request" }
+        }
+      }
     },
     "/posts/{id}": {
       "parameters": [

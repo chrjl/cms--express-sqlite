@@ -27,3 +27,13 @@ WHERE keyword IN ('${keywords.join("','")}')
 
   return result.map((res) => res.post_id);
 }
+
+export function createPost({ title, description }) {
+  const now = new Date().toISOString();
+
+  const query = `INSERT INTO posts (title, description, created, modified) \
+VALUES ('${title}', '${description}', '${now}', '${now}')`;
+
+  const info = db.prepare(query).run();
+  return info;
+}
