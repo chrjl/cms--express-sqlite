@@ -45,3 +45,31 @@ export async function createPost({ metadata }) {
   const result = await response.text();
   return result;
 }
+
+// update post metadata
+export async function patchPostMetadata(id, { metadata }) {
+  const response = await fetch(`/api/posts/${id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(metadata),
+  });
+
+  const result = await response.text();
+  return result;
+}
+
+// update post metadata
+export async function updatePost(id, { metadata, body }) {
+  const response = await fetch(`/api/posts/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ ...metadata, body }),
+  });
+
+  const result = await response.text();
+  return result;
+}
