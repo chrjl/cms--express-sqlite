@@ -1,4 +1,4 @@
-import { html, render } from 'https://esm.run/lit-html@1';
+import { renderOptionElements, getPostData } from './handlers.js';
 
 // define HTML elements
 const allPostsFormElement = document.getElementById('allPostsFormElement');
@@ -13,29 +13,17 @@ const postBodyTextareaElement = document.getElementById(
   'postBodyTextareaElement'
 );
 const newPostButtonElement = document.getElementById('newPostButtonElement');
+const refreshButtonElement = document.getElementById('refreshButtonElement');
 
 // render <option> elements for all posts
-const res = await fetch('/api/posts');
-const allPosts = await res.json();
-
-const postOptionElementTemplates = allPosts.map(
-  ({ id, title }) => html`<option value=${id}>${title}</option>`
-);
-
-const allPostsTemplate = html`${postOptionElementTemplates}`;
-render(allPostsTemplate, document.getElementById('allPostsSelectElement'));
+await renderOptionElements(allPostsSelectElement);
 
 // add event listener to form
 allPostsFormElement.addEventListener('submit', async (e) => {
   e.preventDefault();
 
   const postId = allPostsSelectElement.value;
-
-  const res = await fetch(`/api/posts/${postId}`);
-  const { body, ...metadata } = await res.json();
-
-  const res2 = await fetch(`/api/posts/${postId}/keywords`);
-  const keywords = await res2.json();
+  const {metadata, keywords, body} = await getPostData(postId);
 
   postMetadataTextareaElement.value = JSON.stringify(metadata, null, 2);
   postKeywordsTextareaElement.value = JSON.stringify(keywords, null, 2);
@@ -52,4 +40,9 @@ newPostButtonElement.addEventListener('click', () => {
   postMetadataTextareaElement.value = JSON.stringify(newPostTemplate, null, 2);
   postKeywordsTextareaElement.value = JSON.stringify([]);
   postBodyTextareaElement.value = '';
+});
+
+// add event listener to refresh button
+refreshButtonElement.addEventListener('click', async () => {
+  await renderOptionElements(allPostsSelectElement);
 });

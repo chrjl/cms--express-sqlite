@@ -1,3 +1,5 @@
+import { renderOptionElements, createPost, deletePost } from './handlers.js';
+
 const createPostButtonElement = document.getElementById(
   'createPostButtonElement'
 );
@@ -11,20 +13,16 @@ const allPostsSelectElement = document.getElementById('allPostsSelectElement');
 
 // create a new post
 createPostButtonElement.addEventListener('click', async () => {
-  const data = postMetadataTextareaElement.value;
+  const metadata = postMetadataTextareaElement.value;
 
   try {
-    const response = await fetch('/api/posts', {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: data,
-    });
+    JSON.parse(metadata);
 
-    const result = await response.text();
+    const result = await createPost({ metadata });
     alert(`Success: ${result}`);
-    window.location.reload();
+
+    await renderOptionElements(allPostsSelectElement);
+    postMetadataTextareaElement.value = '';
   } catch (error) {
     alert(`Error: ${error}`);
   }
@@ -35,14 +33,10 @@ deletePostButtonElement.addEventListener('click', async () => {
   const postId = allPostsSelectElement.value;
 
   try {
-    const response = await fetch(`/api/posts/${postId}`, {
-      method: 'delete',
-    });
-
-    const result = await response.text();
-
+    const result = await deletePost(postId);
     alert(`Success`);
-    window.location.reload();
+
+    await renderOptionElements(allPostsSelectElement);
   } catch (error) {
     alert(`Error: ${error}`);
   }

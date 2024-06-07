@@ -6,7 +6,7 @@
     <title>CMS front end</title>
 
     <script type="module" src="./scripts/generate-allposts-form.js"></script>
-    <script type="module" src="./scripts/update-handlers.js"></script>
+    <script type="module" src="./scripts/attach-update-handlers.js"></script>
   </head>
   <body>
     <section id="allPostsContainer">
@@ -15,8 +15,13 @@
         <select id="allPostsSelectElement" size="5"></select>
         <div>
           <button type="submit">Display selected post</button>
-          <button type="button" id="deletePostButtonElement">Delete selected post</button>
+          <button type="button" id="deletePostButtonElement">
+            Delete selected post
+          </button>
           <button type="button" id="newPostButtonElement">New post</button>
+        </div>
+        <div>
+          <button type="button" id="refreshButtonElement">Refresh</button>
         </div>
       </form>
     </section>
