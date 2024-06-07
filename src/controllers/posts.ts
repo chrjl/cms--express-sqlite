@@ -12,10 +12,10 @@ export function describeAllPosts() {
 
 export function getPost(id: number) {
   const query = `SELECT * FROM posts \ 
-WHERE id=${id}
+WHERE id=$id
   `;
 
-  return db.prepare(query).get();
+  return db.prepare(query).get({ id });
 }
 
 export function filterPostsByKeyword(keywords: string[]) {
@@ -32,16 +32,18 @@ export function createPost({ title, description }) {
   const now = new Date().toISOString();
 
   const query = `INSERT INTO posts (title, description, created, modified) \
-VALUES ('${title}', '${description}', '${now}', '${now}')`;
+VALUES ($title, $description, $created, $modified)`;
 
-  const info = db.prepare(query).run();
+  const info = db
+    .prepare(query)
+    .run({ title, description, created: now, modified: now });
   return info;
 }
 
 export function deletePost(id) {
   const query = `DELETE FROM posts \
-WHERE id=${id}`;
+WHERE id=$id`;
 
-  const info = db.prepare(query).run();
+  const info = db.prepare(query).run({ id });
   return info;
 }

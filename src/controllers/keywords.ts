@@ -9,10 +9,10 @@ export function getAllKeywords() {
 
 export function getKeywordsByPost(postId: number) {
   const query = `SELECT keyword FROM keywords \
-WHERE post_id=${postId}  
+WHERE post_id=$postId  
   `;
 
-  const result = db.prepare(query).all();
+  const result = db.prepare(query).all({ postId });
 
   return result.map((r) => r.keyword);
 }
