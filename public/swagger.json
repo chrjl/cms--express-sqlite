@@ -160,6 +160,30 @@
             "default": 1
           }
         ]
+      },
+      "post": {
+        "tags": ["keywords"],
+        "summary": "Associate a keyword with a post.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "keyword": "my new keyword"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Created" },
+          "200": {
+            "description": "OK: the keyword and post were previously associated."
+          },
+          "404": {
+            "description": "Not Found: the `id` was not found in the `posts` table."
+          }
+        }
+      }
       }
     }
   }

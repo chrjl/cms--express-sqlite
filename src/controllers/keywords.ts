@@ -16,3 +16,11 @@ WHERE post_id=$postId
 
   return result.map((r) => r.keyword);
 }
+
+export function addKeywordToPost(postId: number, keyword: string) {
+  const query = `INSERT INTO keywords (keyword, post_id) \
+VALUES ($keyword, $postId)`;
+
+  const result = db.prepare(query).run({ keyword, postId });
+  return result;
+}

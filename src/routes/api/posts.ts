@@ -10,6 +10,7 @@ import {
   deletePost,
   updatePostMetadata,
   updatePostBody,
+  addKeywordToPost,
 } from '../../controllers';
 
 const debug = makeDebug('app:api/posts');
@@ -83,10 +84,31 @@ router
     }
   });
 
-router.route('/:id/keywords').get((req, res) => {
-  const { id } = req.params;
-  const result = getKeywordsByPost(id);
-  res.json(result);
-});
+router
+  .route('/:id/keywords')
+  .get((req, res) => {
+    const { id } = req.params;
+    const result = getKeywordsByPost(id);
+    res.json(result);
+  })
+  .post((req, res) => {
+    const { id } = req.params;
+    const { keyword } = req.body;
+
+    const isPost = getPost(id);
+
+    if (!isPost) {
+      res.sendStatus(404);
+    } else {
+      const existingKeywords = getKeywordsByPost(id);
+
+      if (!existingKeywords.includes(keyword)) {
+        addKeywordToPost(id, keyword);
+        res.sendStatus(201);
+      } else {
+        res.sendStatus(200);
+      }
+    }
+  });
 
 export default router;
