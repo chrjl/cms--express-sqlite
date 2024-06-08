@@ -23,16 +23,25 @@ const refreshButtonElement = document.getElementById('refreshButtonElement');
 // render <option> elements for all posts
 await renderOptionElements(allPostsSelectElement);
 
-// add event listener to form
-allPostsFormElement.addEventListener('submit', async (e) => {
-  e.preventDefault();
-
-  const postId = allPostsSelectElement.value;
+// load a post - add submit listener to form, change listener to select element
+const loadPost = async (postId) => {
   const { metadata, keywords, body } = await getPostData(postId);
 
   postMetadataTextareaElement.value = JSON.stringify(metadata, null, 2);
   postBodyTextareaElement.value = body;
-  await renderKeywordsList(keywords, keywordsContainerElement);
+  renderKeywordsList(keywords, keywordsContainerElement);
+};
+
+allPostsFormElement.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const postId = allPostsSelectElement.value;
+  await loadPost(postId);
+});
+
+allPostsSelectElement.addEventListener('change', async (e) => {
+  const postId = e.target.value;
+  await loadPost(postId);
 });
 
 // add event listener to new post button
