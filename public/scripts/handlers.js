@@ -13,6 +13,21 @@ export async function renderOptionElements(containerElement) {
   render(html`${postOptionElementTemplates}`, containerElement);
 }
 
+export async function renderKeywordsList(keywords, containerElement) {
+  const keywordListItemTemplate = (keyword) =>
+    html`<li>
+      ${keyword}
+    </li>`;
+
+  render(
+    html`<ul>
+      ${keywords.map((k) => keywordListItemTemplate(k))}
+      <!-- ${newKeywordListItemTemplate} -->
+    </ul>`,
+    containerElement
+  );
+}
+
 export async function getPostData(postId) {
   const postsResponse = await fetch(`/api/posts/${postId}`);
   const { body, ...metadata } = await postsResponse.json();

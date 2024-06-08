@@ -1,4 +1,8 @@
-import { renderOptionElements, getPostData } from './handlers.js';
+import {
+  renderOptionElements,
+  renderKeywordsList,
+  getPostData,
+} from './handlers.js';
 
 // define HTML elements
 const allPostsFormElement = document.getElementById('allPostsFormElement');
@@ -9,6 +13,7 @@ const postMetadataTextareaElement = document.getElementById(
 const postKeywordsTextareaElement = document.getElementById(
   'postKeywordsTextareaElement'
 );
+const keywordsContainerElement = document.getElementById('keywordsContainer');
 const postBodyTextareaElement = document.getElementById(
   'postBodyTextareaElement'
 );
@@ -23,11 +28,11 @@ allPostsFormElement.addEventListener('submit', async (e) => {
   e.preventDefault();
 
   const postId = allPostsSelectElement.value;
-  const {metadata, keywords, body} = await getPostData(postId);
+  const { metadata, keywords, body } = await getPostData(postId);
 
   postMetadataTextareaElement.value = JSON.stringify(metadata, null, 2);
-  postKeywordsTextareaElement.value = JSON.stringify(keywords, null, 2);
   postBodyTextareaElement.value = body;
+  await renderKeywordsList(keywords, keywordsContainerElement);
 });
 
 // add event listener to new post button
