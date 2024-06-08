@@ -24,3 +24,12 @@ VALUES ($keyword, $postId)`;
   const result = db.prepare(query).run({ keyword, postId });
   return result;
 }
+
+export function deleteKeywordFromPost(postId: number, keyword: string) {
+  const query = `DELETE FROM keywords \
+WHERE keyword=$keyword \
+AND post_id=$postId`;
+
+  const result = db.prepare(query).run({ keyword, postId });
+  return result;
+}

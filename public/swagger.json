@@ -184,6 +184,32 @@
           }
         }
       }
+    },
+    "/posts/{id}/keywords/{keyword}": {
+      "delete": {
+        "tags": ["keywords"],
+        "summary": "Remove an associated keyword from a post.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "keyword",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {"description": "Not Found"}
+        }
       }
     }
   }

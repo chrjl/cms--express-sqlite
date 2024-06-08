@@ -11,6 +11,7 @@ import {
   updatePostMetadata,
   updatePostBody,
   addKeywordToPost,
+  deleteKeywordFromPost,
 } from '../../controllers';
 
 const debug = makeDebug('app:api/posts');
@@ -110,5 +111,12 @@ router
       }
     }
   });
+
+router.route('/:id/keywords/:keyword').delete((req, res) => {
+  const { id, keyword } = req.params;
+
+  const result = deleteKeywordFromPost(id, keyword);
+  res.sendStatus(204);
+});
 
 export default router;
