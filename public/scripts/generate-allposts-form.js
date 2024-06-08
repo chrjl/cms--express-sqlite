@@ -43,8 +43,8 @@ const newPostTemplate = {
 
 newPostButtonElement.addEventListener('click', () => {
   postMetadataTextareaElement.value = JSON.stringify(newPostTemplate, null, 2);
-  postKeywordsTextareaElement.value = JSON.stringify([]);
   postBodyTextareaElement.value = '';
+  renderKeywordsList([], keywordsContainerElement)
 });
 
 // add event listener to refresh button

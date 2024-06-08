@@ -16,16 +16,42 @@ export async function renderOptionElements(containerElement) {
 export async function renderKeywordsList(keywords, containerElement) {
   const keywordListItemTemplate = (keyword) =>
     html`<li>
-      ${keyword}
+      <form @submit=${deleteKeywordHandler}>
+      <form>
+        <input type="text" name="keyword" value="${keyword}" disabled />
+        <button type="submit">Delete</button>
+      </form>
     </li>`;
+
+  const newKeywordListItemTemplate = html`<li>
+    <form @submit=${createKeywordHandler}>
+    <form>
+      <input type="text" name="keyword" />
+      <button type="submit">Add</button>
+    </form>
+  </li>`;
 
   render(
     html`<ul>
       ${keywords.map((k) => keywordListItemTemplate(k))}
-      <!-- ${newKeywordListItemTemplate} -->
+      ${newKeywordListItemTemplate}
     </ul>`,
     containerElement
   );
+
+  function deleteKeywordHandler(e) {
+    e.preventDefault();
+
+    const keyword = e.target.keyword.value;
+    console.log('Deleting keyword from post: ' + keyword);
+  }
+
+  function createKeywordHandler(e) {
+    e.preventDefault();
+
+    const keyword = e.target.keyword.value;
+    console.log('Associating keyword with post: ' + keyword);
+  }
 }
 
 export async function getPostData(postId) {
