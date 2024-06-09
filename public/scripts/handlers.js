@@ -1,4 +1,5 @@
 import { html, render } from 'https://esm.run/lit-html@1';
+import { loadPost } from './generate-allposts-form.js';
 
 // render <option> elements for all posts
 export async function renderOptionElements(containerElement) {
@@ -39,18 +40,41 @@ export async function renderKeywordsList(keywords, containerElement) {
     containerElement
   );
 
-  function deleteKeywordHandler(e) {
+  async function deleteKeywordHandler(e) {
     e.preventDefault();
+    const allPostsSelectElement = document.getElementById(
+      'allPostsSelectElement'
+    );
 
+    const postId = allPostsSelectElement.value;
     const keyword = e.target.keyword.value;
-    console.log('Deleting keyword from post: ' + keyword);
+
+    await fetch(`/api/posts/${postId}/keywords/${keyword}`, {
+      method: 'delete',
+    });
+
+    await loadPost(postId);
   }
 
-  function createKeywordHandler(e) {
+  async function createKeywordHandler(e) {
     e.preventDefault();
+    const allPostsSelectElement = document.getElementById(
+      'allPostsSelectElement'
+    );
 
+    const postId = allPostsSelectElement.value;
     const keyword = e.target.keyword.value;
-    console.log('Associating keyword with post: ' + keyword);
+
+    await fetch(`/api/posts/${postId}/keywords`, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ keyword }),
+    });
+
+    await loadPost(postId);
+    e.target.keyword.value = '';
   }
 }
 

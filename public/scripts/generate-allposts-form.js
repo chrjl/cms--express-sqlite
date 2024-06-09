@@ -24,7 +24,7 @@ const refreshButtonElement = document.getElementById('refreshButtonElement');
 await renderOptionElements(allPostsSelectElement);
 
 // load a post - add submit listener to form, change listener to select element
-const loadPost = async (postId) => {
+export const loadPost = async (postId) => {
   const { metadata, keywords, body } = await getPostData(postId);
 
   postMetadataTextareaElement.value = JSON.stringify(metadata, null, 2);
