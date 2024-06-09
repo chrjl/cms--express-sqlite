@@ -1,4 +1,5 @@
 import db from '../configs/db';
+import { deleteAllKeywordsFromPost } from './keywords';
 import makeDebug from 'debug';
 
 const debug = makeDebug('app:controllers/posts');
@@ -45,6 +46,8 @@ export function deletePost(id) {
 WHERE id=$id`;
 
   const info = db.prepare(query).run({ id });
+
+  deleteAllKeywordsFromPost(id);
   return info;
 }
 

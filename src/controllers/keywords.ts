@@ -33,3 +33,11 @@ AND post_id=$postId`;
   const result = db.prepare(query).run({ keyword, postId });
   return result;
 }
+
+export function deleteAllKeywordsFromPost(postId: number) {
+  const query = `DELETE FROM keywords \
+WHERE post_id=$postId`;
+
+  const result = db.prepare(query).run({ postId });
+  return result;
+}
