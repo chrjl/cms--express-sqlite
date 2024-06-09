@@ -121,6 +121,10 @@ export async function patchPostMetadata(id, { metadata }) {
     body: JSON.stringify(metadata),
   });
 
+  if (response.status >= 400) {
+    throw new Error('error updating post')
+  }
+
   const result = await response.text();
   return result;
 }
@@ -135,6 +139,10 @@ export async function updatePost(id, { metadata, body }) {
     body: JSON.stringify({ ...metadata, body }),
   });
 
+  if (response.status >= 400) {
+    throw new Error('error updating post')
+  }
+  
   const result = await response.text();
   return result;
 }
