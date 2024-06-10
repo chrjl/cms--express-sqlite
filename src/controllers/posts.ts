@@ -4,54 +4,71 @@ import makeDebug from 'debug';
 
 const debug = makeDebug('app:controllers/posts');
 
-const metadataQuery = `SELECT id, title, description, created, modified FROM posts`;
+export async function describeAllPosts() {
+  const query = `SELECT id, title, description, created, modified FROM posts`;
 
-export function describeAllPosts() {
-  const query = metadataQuery;
-  return db.prepare(query).all();
+  return new Promise((resolve) => {
+    db.all(query, {}, (err, rows) => resolve(rows));
+  });
 }
 
-export function getPost(id: number) {
+export async function getPost(id: number) {
   const query = `SELECT * FROM posts \ 
 WHERE id=$id
   `;
 
-  return db.prepare(query).get({ id });
+  return new Promise((resolve) => {
+    db.get(query, { $id: id }, (err, row) => resolve(row));
+  });
 }
 
-export function filterPostsByKeyword(keywords: string[]) {
+export async function filterPostsByKeyword(keywords: string[]) {
+  const placeholders = keywords.map((k) => '?').join(',');
   const query = `SELECT post_id FROM keywords \
-WHERE keyword IN ('${keywords.join("','")}')
-  `;
+WHERE keyword IN (${placeholders})`;
 
-  const result = db.prepare(query).all();
-
-  return result.map((res) => res.post_id);
+  return new Promise((resolve) => {
+    db.all(query, keywords, (err, rows) => {
+      resolve(rows.map((r) => r.post_id));
+    });
+  });
 }
 
-export function createPost({ title, description }) {
+export async function createPost({ title, description }) {
   const now = new Date().toISOString();
 
   const query = `INSERT INTO posts (title, description, created, modified) \
 VALUES ($title, $description, $created, $modified)`;
 
-  const info = db
-    .prepare(query)
-    .run({ title, description, created: now, modified: now });
-  return info;
+  return new Promise((resolve) => {
+    db.run(
+      query,
+      {
+        $title: title,
+        $description: description,
+        $created: now,
+        $modified: now,
+      },
+      function () {
+        resolve(this);
+      }
+    );
+  });
 }
 
-export function deletePost(id) {
+export async function deletePost(id) {
   const query = `DELETE FROM posts \
 WHERE id=$id`;
 
-  const info = db.prepare(query).run({ id });
-
-  deleteAllKeywordsFromPost(id);
-  return info;
+  return new Promise((resolve) => {
+    db.run(query, { $id: id }, async function () {
+      await deleteAllKeywordsFromPost(id);
+      resolve(this);
+    });
+  });
 }
 
-export function updatePostMetadata(id, { metadata }) {
+export async function updatePostMetadata(id, { metadata }) {
   const { title, description } = metadata;
   const now = new Date().toISOString();
 
@@ -59,18 +76,27 @@ export function updatePostMetadata(id, { metadata }) {
 SET title=$title, description=$description, modified=$modified \
 WHERE id=$id`;
 
-  const info = db.prepare(query).run({ id, title, description, modified: now });
-  return info;
+  return new Promise((resolve) => {
+    db.run(
+      query,
+      { $id: id, $title: title, $description: description, $modified: now },
+      function () {
+        resolve(this);
+      }
+    );
+  });
 }
 
 export function updatePostBody(id, { body }) {
   const now = new Date().toISOString();
-  debug(body);
 
   const query = `UPDATE posts \
-SET body=$body, modified=$now \
+SET body=$body, modified=$modified \
 WHERE id=$id`;
 
-  const info = db.prepare(query).run({ id, body, now });
-  return info
+  return new Promise((resolve) => {
+    db.run(query, { $id: id, $body: body, $modified: now }, function () {
+      resolve(this);
+    });
+  });
 }

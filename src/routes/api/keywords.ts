@@ -3,6 +3,9 @@ import { getAllKeywords } from '../../controllers';
 
 const router = express.Router();
 
-router.get('/', (req, res) => res.json(getAllKeywords()));
+router.get('/', async (req, res) => {
+  const allKeywords = await getAllKeywords();
+  res.json(allKeywords);
+});
 
 export default router;

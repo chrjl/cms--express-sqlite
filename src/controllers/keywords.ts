@@ -1,43 +1,55 @@
 import db from '../configs/db';
 
-export function getAllKeywords() {
+export async function getAllKeywords() {
   const query = 'SELECT DISTINCT keyword FROM keywords';
 
-  const result = db.prepare(query).all();
-  return result.map((row) => row.keyword);
+  return new Promise((resolve) => {
+    db.all(query, {}, (err, rows) => resolve(rows.map((r) => r.keyword)));
+  });
 }
 
-export function getKeywordsByPost(postId: number) {
+export async function getKeywordsByPost(postId: number) {
   const query = `SELECT keyword FROM keywords \
 WHERE post_id=$postId  
   `;
 
-  const result = db.prepare(query).all({ postId });
-
-  return result.map((r) => r.keyword);
+  return new Promise((resolve) => {
+    db.all(query, { $postId: postId }, (err, rows) =>
+      resolve(rows.map((r) => r.keyword))
+    );
+  });
 }
 
 export function addKeywordToPost(postId: number, keyword: string) {
   const query = `INSERT INTO keywords (keyword, post_id) \
 VALUES ($keyword, $postId)`;
 
-  const result = db.prepare(query).run({ keyword, postId });
-  return result;
+  return new Promise((resolve) =>
+    db.run(query, { $keyword: keyword, $postId: postId }, function () {
+      resolve(this);
+    })
+  );
 }
 
-export function deleteKeywordFromPost(postId: number, keyword: string) {
+export async function deleteKeywordFromPost(postId: number, keyword: string) {
   const query = `DELETE FROM keywords \
 WHERE keyword=$keyword \
 AND post_id=$postId`;
 
-  const result = db.prepare(query).run({ keyword, postId });
-  return result;
+  return new Promise((resolve) => {
+    db.run(query, { $keyword: keyword, $postId: postId }, function () {
+      resolve(this);
+    });
+  });
 }
 
-export function deleteAllKeywordsFromPost(postId: number) {
+export async function deleteAllKeywordsFromPost(postId: number) {
   const query = `DELETE FROM keywords \
 WHERE post_id=$postId`;
 
-  const result = db.prepare(query).run({ postId });
-  return result;
+  return new Promise((resolve) => {
+    db.run(query, { $postId: postId }, function () {
+      resolve(this);
+    });
+  });
 }

@@ -19,33 +19,35 @@ const router = express.Router();
 
 router
   .route('/')
-  .get((req, res) => {
+  .get(async (req, res) => {
+    const allPosts = await describeAllPosts();
+
     if (req.query?.keyword) {
       const keywords = [req.query.keyword].flat();
-      const postIds = filterPostsByKeyword(keywords);
+      const postIds = await filterPostsByKeyword(keywords);
 
-      res.json(describeAllPosts().filter((p) => postIds.includes(p.id)));
+      res.json(allPosts.filter((p) => postIds.includes(p.id)));
     } else {
-      res.json(describeAllPosts());
+      res.json(allPosts);
     }
   })
-  .post((req, res) => {
+  .post(async (req, res) => {
     const { title, description } = req.body;
 
     if (!title) {
       res.sendStatus(400);
     }
 
-    const info = createPost({ title, description });
+    const info = await createPost({ title, description });
     debug(info);
     res.sendStatus(201);
   });
 
 router
   .route('/:id')
-  .get((req, res) => {
+  .get(async (req, res) => {
     const { id } = req.params;
-    const result = getPost(id);
+    const result = await getPost(id);
 
     if (result) {
       res.json(result);
@@ -59,11 +61,13 @@ router
 
     res.sendStatus(204);
   })
-  .patch((req, res) => {
+  .patch(async (req, res) => {
     const { id } = req.params;
     const { title, description } = req.body;
 
-    const info = updatePostMetadata(id, { metadata: { title, description } });
+    const info = await updatePostMetadata(id, {
+      metadata: { title, description },
+    });
 
     if (info.changes === 0) {
       res.sendStatus(404);
@@ -71,39 +75,39 @@ router
       res.sendStatus(200);
     }
   })
-  .put((req, res) => {
+  .put(async (req, res) => {
     const { id } = req.params;
     const { body, ...metadata } = req.body;
 
-    const info = updatePostMetadata(id, { metadata });
+    const info = await updatePostMetadata(id, { metadata });
 
     if (info.changes === 0) {
       res.sendStatus(404);
     } else {
-      updatePostBody(id, { body });
+      await updatePostBody(id, { body });
       res.sendStatus(200);
     }
   });
 
 router
   .route('/:id/keywords')
-  .get((req, res) => {
+  .get(async (req, res) => {
     const { id } = req.params;
-    const result = getKeywordsByPost(id);
+    const result = await getKeywordsByPost(id);
     res.json(result);
   })
-  .post((req, res) => {
+  .post(async (req, res) => {
     const { id } = req.params;
     const { keyword } = req.body;
 
-    const isPost = getPost(id);
+    const isPost = await getPost(id);
 
     if (!isPost) {
       res.sendStatus(404);
     } else {
-      const existingKeywords = getKeywordsByPost(id);
+      const existingKeywords = await getKeywordsByPost(id);
 
-      if (!existingKeywords.includes(keyword)) {
+      if (!existingKeywords?.includes(keyword)) {
         addKeywordToPost(id, keyword);
         res.sendStatus(201);
       } else {
@@ -112,10 +116,10 @@ router
     }
   });
 
-router.route('/:id/keywords/:keyword').delete((req, res) => {
+router.route('/:id/keywords/:keyword').delete(async (req, res) => {
   const { id, keyword } = req.params;
 
-  const result = deleteKeywordFromPost(id, keyword);
+  const result = await deleteKeywordFromPost(id, keyword);
   res.sendStatus(204);
 });
 
