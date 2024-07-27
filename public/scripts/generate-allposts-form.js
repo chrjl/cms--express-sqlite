@@ -7,11 +7,8 @@ import {
 // define HTML elements
 const allPostsFormElement = document.getElementById('allPostsFormElement');
 const allPostsSelectElement = document.getElementById('allPostsSelectElement');
-const postMetadataTextareaElement = document.getElementById(
-  'postMetadataTextareaElement'
-);
-const postKeywordsTextareaElement = document.getElementById(
-  'postKeywordsTextareaElement'
+const postMetadataFormElement = document.getElementById(
+  'postMetadataFormElement'
 );
 const keywordsContainerElement = document.getElementById('keywordsContainer');
 const postBodyTextareaElement = document.getElementById(
@@ -26,10 +23,19 @@ await renderOptionElements(allPostsSelectElement);
 // load a post - add submit listener to form, change listener to select element
 export const loadPost = async (postId) => {
   const { metadata, keywords, body } = await getPostData(postId);
+  const { id, title, description, created, modified } = metadata;
 
-  postMetadataTextareaElement.value = JSON.stringify(metadata, null, 2);
+  postMetadataFormElement.elements.postId.value = id;
+  postMetadataFormElement.elements.title.value = title;
+  postMetadataFormElement.elements.description.value = description;
+  postMetadataFormElement.elements.created.value = created;
+  postMetadataFormElement.elements.modified.value = modified;
+
   postBodyTextareaElement.value = body;
+
   renderKeywordsList(keywords, keywordsContainerElement);
+
+  return metadata;
 };
 
 allPostsFormElement.addEventListener('submit', async (e) => {
@@ -51,12 +57,14 @@ const newPostTemplate = {
 };
 
 newPostButtonElement.addEventListener('click', () => {
-  postMetadataTextareaElement.value = JSON.stringify(newPostTemplate, null, 2);
+  allPostsSelectElement.value = null;
+  postMetadataFormElement.reset();
   postBodyTextareaElement.value = '';
-  renderKeywordsList([], keywordsContainerElement)
+  renderKeywordsList([], keywordsContainerElement);
 });
 
 // add event listener to refresh button
 refreshButtonElement.addEventListener('click', async () => {
+  allPostsSelectElement.options.length = 0;
   await renderOptionElements(allPostsSelectElement);
 });

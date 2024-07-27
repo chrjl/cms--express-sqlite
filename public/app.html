@@ -7,6 +7,7 @@
 
     <script type="module" src="./scripts/generate-allposts-form.js"></script>
     <script type="module" src="./scripts/attach-update-handlers.js"></script>
+    <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <section id="allPostsContainer">
@@ -30,7 +31,33 @@
       <h1>Selected post</h1>
 
       <h3>Metadata</h3>
-      <textarea id="postMetadataTextareaElement" rows="10" cols="80"></textarea>
+
+      <form id="postMetadataFormElement">
+        <label for="postIdInputElement">Id:</label>
+        <input type="text" id="postIdInputElement" name="postId" disabled />
+
+        <label for="postTitleInputElement">Title:</label>
+        <input type="text" id="postTitleInputElement" name="title" />
+
+        <label for="postDescriptionInputElement">Description:</label>
+        <input
+          type="text"
+          id="postDescriptionInputElement"
+          name="description"
+        />
+
+        <label for="postCreatedInputElement">Created:</label>
+        <input type="text" id="postCreatedInputElement" name="created" />
+
+        <label for="postModifiedInputElement">Updated:</label>
+        <input
+          type="text"
+          id="postModifiedInputElement"
+          name="modified"
+          disabled
+        />
+      </form>
+
       <p>
         <button type="button" id="createPostButtonElement">Create post</button>
         <button type="button" id="updatePostMetadataButtonElement">

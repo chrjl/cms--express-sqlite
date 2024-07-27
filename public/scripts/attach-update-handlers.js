@@ -12,8 +12,8 @@ const createPostButtonElement = document.getElementById(
 const deletePostButtonElement = document.getElementById(
   'deletePostButtonElement'
 );
-const postMetadataTextareaElement = document.getElementById(
-  'postMetadataTextareaElement'
+const postMetadataFormElement = document.getElementById(
+  'postMetadataFormElement'
 );
 const postBodyTextareaElement = document.getElementById(
   'postBodyTextareaElement'
@@ -28,16 +28,17 @@ const updatePostBodyButtonElement = document.getElementById(
 
 // create a new post
 createPostButtonElement.addEventListener('click', async () => {
-  const metadata = postMetadataTextareaElement.value;
+  const formData = new FormData(postMetadataFormElement);
+  const metadata = Object.fromEntries(formData);
 
   try {
-    JSON.parse(metadata);
-
-    const result = await createPost({ metadata });
+    const result = await createPost({ metadata: JSON.stringify(metadata) });
     alert(`Success: ${result}`);
 
+    postMetadataFormElement.reset();
+
+    allPostsSelectElement.options.length = 0;
     await renderOptionElements(allPostsSelectElement);
-    postMetadataTextareaElement.value = '';
   } catch (error) {
     alert(`Error: ${error}`);
   }
@@ -51,6 +52,7 @@ deletePostButtonElement.addEventListener('click', async () => {
     const result = await deletePost(postId);
     alert(`Success`);
 
+    allPostsSelectElement.options.length = 0;
     await renderOptionElements(allPostsSelectElement);
   } catch (error) {
     alert(`Error: ${error}`);
@@ -60,9 +62,12 @@ deletePostButtonElement.addEventListener('click', async () => {
 // update post metadata
 updatePostMetadataButtonElement.addEventListener('click', async () => {
   try {
-    const { id, ...metadata } = JSON.parse(postMetadataTextareaElement.value);
+    const postId = allPostsSelectElement.value;
 
-    const result = await patchPostMetadata(id, { metadata });
+    const formData = new FormData(postMetadataFormElement);
+    const metadata = Object.fromEntries(formData);
+
+    const result = await patchPostMetadata(postId, { metadata });
     alert(`Success`);
 
     await renderOptionElements(allPostsSelectElement);
@@ -74,10 +79,14 @@ updatePostMetadataButtonElement.addEventListener('click', async () => {
 // update post body and metadata
 updatePostBodyButtonElement.addEventListener('click', async () => {
   try {
-    const { id, ...metadata } = JSON.parse(postMetadataTextareaElement.value);
+    const postId = allPostsSelectElement.value;
+
+    const formData = new FormData(postMetadataFormElement);
+    const metadata = Object.fromEntries(formData);
+
     const body = postBodyTextareaElement.value;
 
-    const result = await updatePost(id, { metadata, body });
+    const result = await updatePost(postId, { metadata, body });
     alert(`Success`);
 
     await renderOptionElements(allPostsSelectElement);
