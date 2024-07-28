@@ -1,0 +1,17 @@
+html {
+  width: 640px;
+  box-sizing: border-box;
+}
+
+textarea,
+select {
+  width: 100%;
+}
+
+#postMetadataFormElement {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  column-gap: 1em;
+  row-gap: 0.5em;
+}
