@@ -1,7 +1,8 @@
 import {
-  renderOptionElements,
+  // renderOptionElements,
   renderKeywordsList,
   getPostData,
+  getAllPostsMetadata,
 } from './handlers.js';
 
 // define HTML elements
@@ -18,7 +19,8 @@ const newPostButtonElement = document.getElementById('newPostButtonElement');
 const refreshButtonElement = document.getElementById('refreshButtonElement');
 
 // render <option> elements for all posts
-await renderOptionElements(allPostsSelectElement);
+const allPosts = await getAllPostsMetadata();
+await renderOptionElements(allPosts, allPostsSelectElement);
 
 // load a post - add submit listener to form, change listener to select element
 export const loadPost = async (postId) => {
@@ -68,3 +70,12 @@ refreshButtonElement.addEventListener('click', async () => {
   allPostsSelectElement.options.length = 0;
   await renderOptionElements(allPostsSelectElement);
 });
+
+async function renderOptionElements(data, containerElement) {
+  containerElement.options.length = 0;
+
+  allPosts.forEach(({ id, title }) => {
+    const optionElement = new Option(title, id);
+    containerElement.append(optionElement);
+  });
+}

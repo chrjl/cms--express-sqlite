@@ -1,19 +1,6 @@
 import { html, render } from 'https://esm.run/lit-html@1';
 import { loadPost } from './generate-allposts-form.js';
 
-// render <option> elements for all posts
-export async function renderOptionElements(containerElement) {
-  const res = await fetch('/api/posts');
-  const allPosts = await res.json();
-
-  const postOptionElementTemplates = allPosts.map(
-    ({ id, title }) => html`<option value=${id}>${title}</option>`
-  );
-
-  const allPostsTemplate = html`${postOptionElementTemplates}`;
-  render(html`${postOptionElementTemplates}`, containerElement);
-}
-
 export async function renderKeywordsList(keywords, containerElement) {
   const keywordListItemTemplate = (keyword) =>
     html`<li>
@@ -78,6 +65,13 @@ export async function renderKeywordsList(keywords, containerElement) {
   }
 }
 
+export async function getAllPostsMetadata() {
+  const res = await fetch('/api/posts');
+  const allPosts = await res.json();
+
+  return allPosts;
+}
+
 export async function getPostData(postId) {
   const postsResponse = await fetch(`/api/posts/${postId}`);
   const { body, ...metadata } = await postsResponse.json();
@@ -122,7 +116,7 @@ export async function patchPostMetadata(id, { metadata }) {
   });
 
   if (response.status >= 400) {
-    throw new Error('error updating post')
+    throw new Error('error updating post');
   }
 
   const result = await response.text();
@@ -140,9 +134,9 @@ export async function updatePost(id, { metadata, body }) {
   });
 
   if (response.status >= 400) {
-    throw new Error('error updating post')
+    throw new Error('error updating post');
   }
-  
+
   const result = await response.text();
   return result;
 }
