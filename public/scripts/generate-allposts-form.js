@@ -1,8 +1,8 @@
 import {
-  // renderOptionElements,
   renderKeywordsList,
   getPostData,
   getAllPostsMetadata,
+  deletePost,
 } from './handlers.js';
 
 // define HTML elements
@@ -12,18 +12,95 @@ const postMetadataFormElement = document.getElementById(
   'postMetadataFormElement'
 );
 const keywordsContainerElement = document.getElementById('keywordsContainer');
+const postBodyFormElement = document.getElementById('postBodyFormElement');
 const postBodyTextareaElement = document.getElementById(
   'postBodyTextareaElement'
 );
-const newPostButtonElement = document.getElementById('newPostButtonElement');
-const refreshButtonElement = document.getElementById('refreshButtonElement');
+
+const createPostButtonElement = document.getElementById(
+  'createPostButtonElement'
+);
+const updatePostMetadataButtonElement = document.getElementById(
+  'updatePostMetadataButtonElement'
+);
+const updatePostBodyButtonElement = document.getElementById(
+  'updatePostBodyButtonElement'
+);
 
 // render <option> elements for all posts
 const allPosts = await getAllPostsMetadata();
 await renderOptionElements(allPosts, allPostsSelectElement);
 
-// load a post - add submit listener to form, change listener to select element
-export const loadPost = async (postId) => {
+// reload posts and reset page - on form reset
+allPostsFormElement.addEventListener('reset', async () => {
+  const allPosts = await getAllPostsMetadata();
+  await renderOptionElements(allPosts, allPostsSelectElement);
+
+  postMetadataFormElement.reset();
+  postBodyFormElement.reset();
+  renderKeywordsList([], keywordsContainerElement);
+});
+
+// load a post - on form submit or select element change
+allPostsFormElement.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const postId = allPostsSelectElement.value;
+  await loadPost(postId);
+});
+
+allPostsSelectElement.addEventListener('change', async (e) => {
+  const postId = e.target.value;
+  await loadPost(postId);
+
+  updatePostMetadataButtonElement.disabled = false;
+  createPostButtonElement.disabled = true;
+  updatePostBodyButtonElement.disabled = false;
+});
+
+// attach remaining button handlers to form - new post, delete post
+allPostsFormElement.addEventListener('click', async (e) => {
+  if (e.target.nodeName !== 'BUTTON') {
+    return;
+  }
+
+  switch (e.target.dataset.action) {
+    case 'new-post': {
+      allPostsFormElement.reset();
+
+      updatePostMetadataButtonElement.disabled = true;
+      createPostButtonElement.disabled = false;
+      updatePostBodyButtonElement.disabled = true;
+      return;
+    }
+
+    case 'delete-post': {
+      const postId = allPostsSelectElement.value;
+
+      try {
+        const result = await deletePost(postId);
+        alert(`Success`);
+
+        allPostsFormElement.reset();
+      } catch (error) {
+        alert(`Error: ${error}`);
+      }
+
+      return;
+    }
+  }
+});
+
+async function renderOptionElements(data, containerElement) {
+  containerElement.options.length = 0;
+
+  data.forEach(({ id, title }) => {
+    const optionElement = new Option(title, id);
+    containerElement.append(optionElement);
+  });
+}
+
+export async function loadPost(postId) {
   const { metadata, keywords, body } = await getPostData(postId);
   const { id, title, description, created, modified } = metadata;
 
@@ -38,44 +115,4 @@ export const loadPost = async (postId) => {
   renderKeywordsList(keywords, keywordsContainerElement);
 
   return metadata;
-};
-
-allPostsFormElement.addEventListener('submit', async (e) => {
-  e.preventDefault();
-
-  const postId = allPostsSelectElement.value;
-  await loadPost(postId);
-});
-
-allPostsSelectElement.addEventListener('change', async (e) => {
-  const postId = e.target.value;
-  await loadPost(postId);
-});
-
-// add event listener to new post button
-const newPostTemplate = {
-  title: '',
-  description: '',
-};
-
-newPostButtonElement.addEventListener('click', () => {
-  allPostsSelectElement.value = null;
-  postMetadataFormElement.reset();
-  postBodyTextareaElement.value = '';
-  renderKeywordsList([], keywordsContainerElement);
-});
-
-// add event listener to refresh button
-refreshButtonElement.addEventListener('click', async () => {
-  allPostsSelectElement.options.length = 0;
-  await renderOptionElements(allPostsSelectElement);
-});
-
-async function renderOptionElements(data, containerElement) {
-  containerElement.options.length = 0;
-
-  allPosts.forEach(({ id, title }) => {
-    const optionElement = new Option(title, id);
-    containerElement.append(optionElement);
-  });
 }

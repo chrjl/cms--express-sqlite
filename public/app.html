@@ -16,13 +16,29 @@
         <select id="allPostsSelectElement" size="5"></select>
         <div>
           <button type="submit">Display selected post</button>
-          <button type="button" id="deletePostButtonElement">
+          <button
+            type="button"
+            id="deletePostButtonElement"
+            data-action="delete-post"
+          >
             Delete selected post
           </button>
-          <button type="button" id="newPostButtonElement">New post</button>
+          <button
+            type="button"
+            id="newPostButtonElement"
+            data-action="new-post"
+          >
+            New post
+          </button>
         </div>
         <div>
-          <button type="button" id="refreshButtonElement">Refresh</button>
+          <button
+            type="reset"
+            id="refreshButtonElement"
+            data-action="refresh-posts"
+          >
+            Refresh
+          </button>
         </div>
       </form>
     </section>
@@ -59,19 +75,23 @@
       </form>
 
       <p>
-        <button type="button" id="createPostButtonElement">Create post</button>
-        <button type="button" id="updatePostMetadataButtonElement">
+        <button type="button" id="createPostButtonElement" disabled>
+          Create post
+        </button>
+        <button type="button" id="updatePostMetadataButtonElement" disabled>
           Update post metadata
         </button>
       </p>
 
       <h3>Post body</h3>
-      <textarea id="postBodyTextareaElement" rows="10" cols="80"></textarea>
-      <p>
-        <button type="button" id="updatePostBodyButtonElement">
-          Update content and metadata
-        </button>
-      </p>
+      <form id="postBodyFormElement">
+        <textarea id="postBodyTextareaElement" rows="10" cols="80"></textarea>
+        <p>
+          <button type="button" id="updatePostBodyButtonElement" disabled>
+            Update content and metadata
+          </button>
+        </p>
+      </form>
 
       <h3>Keywords</h3>
       <div id="keywordsContainer"></div>

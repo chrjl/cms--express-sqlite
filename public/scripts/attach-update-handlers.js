@@ -1,7 +1,5 @@
 import {
-  renderOptionElements,
   createPost,
-  deletePost,
   patchPostMetadata,
   updatePost,
 } from './handlers.js';
@@ -9,15 +7,13 @@ import {
 const createPostButtonElement = document.getElementById(
   'createPostButtonElement'
 );
-const deletePostButtonElement = document.getElementById(
-  'deletePostButtonElement'
-);
 const postMetadataFormElement = document.getElementById(
   'postMetadataFormElement'
 );
 const postBodyTextareaElement = document.getElementById(
   'postBodyTextareaElement'
 );
+const allPostsFormElement = document.getElementById('allPostsFormElement');
 const allPostsSelectElement = document.getElementById('allPostsSelectElement');
 const updatePostMetadataButtonElement = document.getElementById(
   'updatePostMetadataButtonElement'
@@ -35,25 +31,8 @@ createPostButtonElement.addEventListener('click', async () => {
     const result = await createPost({ metadata: JSON.stringify(metadata) });
     alert(`Success: ${result}`);
 
+    allPostsFormElement.reset();
     postMetadataFormElement.reset();
-
-    allPostsSelectElement.options.length = 0;
-    await renderOptionElements(allPostsSelectElement);
-  } catch (error) {
-    alert(`Error: ${error}`);
-  }
-});
-
-// delete the selected post
-deletePostButtonElement.addEventListener('click', async () => {
-  const postId = allPostsSelectElement.value;
-
-  try {
-    const result = await deletePost(postId);
-    alert(`Success`);
-
-    allPostsSelectElement.options.length = 0;
-    await renderOptionElements(allPostsSelectElement);
   } catch (error) {
     alert(`Error: ${error}`);
   }
