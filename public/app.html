@@ -6,6 +6,7 @@
     <title>CMS front end</title>
 
     <script type="module" src="./scripts/generate-allposts-form.js"></script>
+    <script type="module" src="./scripts/handlers-post-metadata-form.js"></script>
     <script type="module" src="./scripts/attach-update-handlers.js"></script>
     <link rel="stylesheet" href="./styles.css" />
   </head>
@@ -49,39 +50,41 @@
       <h3>Metadata</h3>
 
       <form id="postMetadataFormElement">
-        <label for="postIdInputElement">Id:</label>
-        <input type="text" id="postIdInputElement" name="postId" disabled />
+        <div class="grid-text-form">
+          <label for="postIdInputElement">Id:</label>
+          <input type="text" id="postIdInputElement" name="postId" disabled />
 
-        <label for="postTitleInputElement">Title:</label>
-        <input type="text" id="postTitleInputElement" name="title" />
+          <label for="postTitleInputElement">Title:</label>
+          <input type="text" id="postTitleInputElement" name="title" />
 
-        <label for="postDescriptionInputElement">Description:</label>
-        <input
-          type="text"
-          id="postDescriptionInputElement"
-          name="description"
-        />
+          <label for="postDescriptionInputElement">Description:</label>
+          <input
+            type="text"
+            id="postDescriptionInputElement"
+            name="description"
+          />
 
-        <label for="postCreatedInputElement">Created:</label>
-        <input type="text" id="postCreatedInputElement" name="created" />
+          <label for="postCreatedInputElement">Created:</label>
+          <input type="text" id="postCreatedInputElement" name="created" />
 
-        <label for="postModifiedInputElement">Updated:</label>
-        <input
-          type="text"
-          id="postModifiedInputElement"
-          name="modified"
-          disabled
-        />
+          <label for="postModifiedInputElement">Updated:</label>
+          <input
+            type="text"
+            id="postModifiedInputElement"
+            name="modified"
+            disabled
+          />
+        </div>
+
+        <div>
+          <button type="submit" id="createPostButtonElement" disabled>
+            Create post
+          </button>
+          <button type="submit" id="updatePostMetadataButtonElement" disabled>
+            Update post metadata
+          </button>
+        </div>
       </form>
-
-      <p>
-        <button type="button" id="createPostButtonElement" disabled>
-          Create post
-        </button>
-        <button type="button" id="updatePostMetadataButtonElement" disabled>
-          Update post metadata
-        </button>
-      </p>
 
       <h3>Post body</h3>
       <form id="postBodyFormElement">

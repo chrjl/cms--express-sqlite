@@ -8,10 +8,11 @@ select {
   width: 100%;
 }
 
-#postMetadataFormElement {
+.grid-text-form {
   display: grid;
   grid-template-columns: auto 1fr;
   align-items: center;
   column-gap: 1em;
   row-gap: 0.5em;
+  margin-bottom: 1em;
 }
