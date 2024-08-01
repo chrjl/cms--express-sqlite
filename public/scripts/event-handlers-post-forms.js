@@ -1,4 +1,4 @@
-import { createPost, patchPostMetadata, updatePost } from './handlers.js';
+import { createPost, patchPostMetadata, updatePost } from './api-handlers.js';
 
 const postMetadataFormElement = document.getElementById(
   'postMetadataFormElement'

@@ -1,6 +1,6 @@
 import { html, render } from 'https://esm.run/lit-html@1';
 import { loadPost } from './generate-allposts-form.js';
-import { deleteKeywordFromPost } from './handlers.js';
+import { deleteKeywordFromPost } from './api-handlers.js';
 
 export async function renderKeywordsList(keywords, containerElement) {
   const keywordListItemTemplate = (keyword) =>

@@ -2,7 +2,7 @@ import {
   getPostData,
   getAllPostsMetadata,
   deletePost,
-} from './handlers.js';
+} from './api-handlers.js';
 
 import { renderKeywordsList } from './generate-keywords-list.js';
 
