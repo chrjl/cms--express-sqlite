@@ -1,9 +1,10 @@
 import {
-  renderKeywordsList,
   getPostData,
   getAllPostsMetadata,
   deletePost,
 } from './handlers.js';
+
+import { renderKeywordsList } from './generate-keywords-list.js';
 
 // define HTML elements
 const allPostsFormElement = document.getElementById('allPostsFormElement');
