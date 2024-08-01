@@ -1,8 +1,13 @@
-import { createPost, patchPostMetadata } from './handlers.js';
+import { createPost, patchPostMetadata, updatePost } from './handlers.js';
 
 const postMetadataFormElement = document.getElementById(
   'postMetadataFormElement'
 );
+const postBodyFormElement = document.getElementById('postBodyFormElement');
+const postBodyTextareaElement = document.getElementById(
+  'postBodyTextareaElement'
+);
+
 const allPostsFormElement = document.getElementById('allPostsFormElement');
 const allPostsSelectElement = document.getElementById('allPostsSelectElement');
 
@@ -23,6 +28,26 @@ postMetadataFormElement.addEventListener('submit', async (e) => {
       await patchPostMetadata(postId, { metadata });
     }
 
+    alert(`Success`);
+
+    allPostsFormElement.reset();
+  } catch (error) {
+    alert(`Error: ${error}`);
+  }
+});
+
+postBodyFormElement.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const postId = allPostsSelectElement.value;
+
+  const formData = new FormData(postMetadataFormElement);
+  const metadata = Object.fromEntries(formData);
+
+  const body = postBodyTextareaElement.value;
+
+  try {
+    await updatePost(postId, { metadata, body });
     alert(`Success`);
 
     allPostsFormElement.reset();
